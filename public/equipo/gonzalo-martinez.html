@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gonzalo Martínez Castillo | Martínez e Hidalgo</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar" id="navbar">
+        <div class="container nav-inner">
+            <a href="../#inicio" class="nav-logo">
+                M&H <span style="font-weight: 300; opacity: 0.5;">|</span> Martínez e Hidalgo
+            </a>
+            <a href="../#equipo" class="btn-ghost" style="font-size: 11px;">← Volver al equipo</a>
+        </div>
+    </nav>
+
+    <main id="main" style="padding-top: 120px;">
+        <section class="section">
+            <div class="container" style="display: grid; grid-template-columns: repeat(12, 1fr); gap: var(--gutter);">
+                <div style="grid-column: span 6;" class="reveal">
+                    <span class="text-uppercase text-accent">Perfil Profesional</span>
+                    <h1 style="font-size: var(--fs-lg); text-transform: uppercase; font-weight: 800; margin: 24px 0;">Gonzalo Martínez Castillo</h1>
+                    <p class="text-uppercase" style="font-weight: 700; margin-bottom: 12px;">Socio Principal</p>
+                    <p style="color: var(--text-muted); font-size: var(--fs-md); margin-bottom: 40px;">Derecho Tributario · Planificación Fiscal</p>
+                    <a href="../#contacto" class="btn-primary">Agendar Reunión</a>
+                </div>
+                <div style="grid-column: 8 / span 5;" class="reveal-up">
+                    <div class="team-media" style="aspect-ratio: 4/5; height: auto;">
+                        <img src="../assets/legal/vds.jpg" alt="Gonzalo Martínez Castillo" style="filter: grayscale(1);">
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const items = document.querySelectorAll(".reveal, .reveal-up");
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("is-visible");
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+            items.forEach(item => observer.observe(item));
+        });
+    </script>
+</body>
+</html>
