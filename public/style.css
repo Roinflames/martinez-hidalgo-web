@@ -356,6 +356,53 @@ img:hover { filter: grayscale(0) contrast(1); }
 
 .chatbot-widget.open .chat-panel { display: flex; }
 
+/* Chat messages */
+.chat-msg {
+  padding: 16px;
+  max-width: 80%;
+  font-size: var(--fs-sm);
+  white-space: pre-wrap;
+}
+
+.chat-msg--bot {
+  background: var(--bg-subtle);
+  color: var(--text);
+  border-left: 4px solid var(--accent);
+  align-self: flex-start;
+}
+
+.chat-msg--user {
+  background: var(--text);
+  color: var(--bg);
+  align-self: flex-end;
+}
+
+.chat-msg--system {
+  background: rgba(10, 10, 10, 0.03);
+  color: var(--text-muted);
+  border: 1px dashed var(--line-subtle);
+  align-self: stretch;
+  max-width: 100%;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+}
+
+@keyframes chatPulse {
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 1; }
+}
+
+.chat-msg--pending {
+  font-style: italic;
+  animation: chatPulse 1.2s ease-in-out infinite;
+}
+
+#send-msg[disabled],
+#chat-input[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 /* Responsive */
 @media (max-width: 1024px) {
   .hero-title { grid-column: span 12; }
