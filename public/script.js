@@ -69,19 +69,140 @@ const initChatbot = () => {
   const widget = document.getElementById("chatbot-widget");
   const toggle = document.getElementById("chat-toggle");
   const close = document.getElementById("close-chat");
+  const panel = document.getElementById("chat-panel");
   const input = document.getElementById("chat-input");
   const send = document.getElementById("send-msg");
   const messages = document.getElementById("chat-messages");
 
   const toggleChat = () => widget.classList.toggle("open");
-  
-  const addMessage = (text, type = "bot", { pending = false } = {}) => {
+
+  // Normalize inline-styled markup into class-based styling (we only edit CSS/JS)
+  const normalizeChatMarkup = () => {
+    if (!panel) return;
+    const headerEl = panel.firstElementChild;
+    const inputBarEl = input?.parentElement || null;
+
+    headerEl?.classList.add("chat-header");
+    inputBarEl?.classList.add("chat-inputbar");
+    messages?.classList.add("chat-body");
+
+    // Remove inline styles so CSS can control the look (safe: scoped to chat widget)
+    headerEl?.removeAttribute("style");
+    inputBarEl?.removeAttribute("style");
+    messages?.removeAttribute("style");
+    input?.removeAttribute("style");
+    send?.removeAttribute("style");
+    close?.removeAttribute("style");
+
+    // Header layout (title + subtitle + close)
+    if (headerEl && !headerEl.dataset.enhanced) {
+      headerEl.dataset.enhanced = "1";
+      headerEl.textContent = "";
+
+      const titles = document.createElement("div");
+      titles.className = "chat-header__titles";
+
+      const title = document.createElement("div");
+      title.className = "chat-header__title";
+      title.textContent = "Analizador académico";
+
+      const sub = document.createElement("div");
+      sub.className = "chat-header__sub";
+      sub.textContent = "Información jurídica • sin asesoría";
+
+      titles.appendChild(title);
+      titles.appendChild(sub);
+      headerEl.appendChild(titles);
+
+      if (close) {
+        close.classList.add("chat-close");
+        close.textContent = "×";
+        headerEl.appendChild(close);
+      }
+    }
+
+    // Make the launcher look like the reference (pill button)
+    if (toggle && !toggle.dataset.enhanced) {
+      toggle.dataset.enhanced = "1";
+      toggle.innerHTML =
+        '<span class="chat-launch__icon" aria-hidden="true">⌁</span><span class="chat-launch__label">Analizador</span>';
+      toggle.setAttribute("aria-label", "Abrir analizador académico");
+    }
+
+    if (input && !input.dataset.enhanced) {
+      input.dataset.enhanced = "1";
+      input.placeholder = "Consulta académica… (ej: SII, IVA, contrato, demanda)";
+    }
+
+    if (send && !send.dataset.enhanced) {
+      send.dataset.enhanced = "1";
+      send.classList.add("chat-send");
+      send.innerHTML = '<span aria-hidden="true">➔</span>';
+      send.setAttribute("aria-label", "Enviar consulta");
+    }
+
+    // Style the initial welcome message if present
+    const first = messages?.firstElementChild;
+    if (first && !first.classList.contains("chat-msg")) {
+      first.classList.add("chat-msg", "chat-msg--bot");
+      first.removeAttribute("style");
+      first.textContent =
+        "Herramienta académica de apoyo: describe un caso en términos generales y el sistema mostrará un análisis informativo (sin recomendaciones).";
+    }
+  };
+
+  const ensureIntroBlocks = () => {
+    if (!messages || messages.dataset.intro === "1") return;
+    messages.dataset.intro = "1";
+
+    const banner = document.createElement("div");
+    banner.className = "chat-banner";
+    banner.innerHTML =
+      "<strong>Importante:</strong> respuestas informativas, sin recomendaciones, predicciones ni asesoría profesional.";
+
+    const prompts = document.createElement("div");
+    prompts.className = "chat-prompts";
+    const promptItems = [
+      "SII + IVA",
+      "Impuesto a la Renta",
+      "Deuda y mora",
+      "Contrato e incumplimiento",
+      "Demanda (concepto)",
+    ];
+    for (const label of promptItems) {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "chat-prompt";
+      b.textContent = label;
+      b.addEventListener("click", () => {
+        if (!input || input.disabled) return;
+        input.value = label;
+        input.focus();
+      });
+      prompts.appendChild(b);
+    }
+
+    const wrap = document.createElement("div");
+    wrap.className = "chat-intro";
+    wrap.appendChild(banner);
+    wrap.appendChild(prompts);
+
+    addMessage(wrap, "system");
+  };
+
+  const addMessage = (content, type = "bot", { pending = false } = {}) => {
     const msg = document.createElement("div");
     const typeClass =
       type === "user" ? "chat-msg--user" : type === "system" ? "chat-msg--system" : "chat-msg--bot";
     msg.classList.add("chat-msg", typeClass);
     if (pending) msg.classList.add("chat-msg--pending");
-    msg.textContent = text;
+    if (typeof content === "string") {
+      msg.textContent = content;
+    } else if (content instanceof Node) {
+      msg.appendChild(content);
+    } else {
+      msg.textContent = String(content ?? "");
+    }
     messages.appendChild(msg);
     messages.scrollTop = messages.scrollHeight;
     return msg;
@@ -225,23 +346,59 @@ const initChatbot = () => {
   const renderAcademicAnalysis = (analysis) => {
     const disclaimer = "Este sistema entrega información con fines académicos y no constituye asesoría legal.";
 
-    return [
-      "Análisis de información jurídica:",
-      "",
-      "Tipo de materia detectada:",
-      analysis.matter,
-      "",
-      "Normativa relacionada:",
-      analysis.norms.map((n) => `- ${n}`).join("\n"),
-      "",
-      "Elementos relevantes:",
-      analysis.concepts.map((c) => `- ${c}`).join("\n"),
-      "",
-      "Contexto general:",
-      analysis.context,
-      "",
-      disclaimer,
-    ].join("\n");
+    const card = document.createElement("div");
+    card.className = "chat-analysis";
+
+    const title = document.createElement("div");
+    title.className = "chat-analysis__title";
+    title.textContent = "Análisis de información jurídica";
+    card.appendChild(title);
+
+    const addSection = (label, bodyNode) => {
+      const section = document.createElement("div");
+      section.className = "chat-analysis__section";
+      const h = document.createElement("div");
+      h.className = "chat-analysis__label";
+      h.textContent = label;
+      section.appendChild(h);
+      section.appendChild(bodyNode);
+      card.appendChild(section);
+    };
+
+    const matter = document.createElement("div");
+    matter.className = "chat-analysis__value";
+    matter.textContent = analysis.matter;
+    addSection("Tipo de materia detectada", matter);
+
+    const norms = document.createElement("ul");
+    norms.className = "chat-analysis__list";
+    for (const n of analysis.norms) {
+      const li = document.createElement("li");
+      li.textContent = n;
+      norms.appendChild(li);
+    }
+    addSection("Normativa relacionada", norms);
+
+    const concepts = document.createElement("ul");
+    concepts.className = "chat-analysis__list";
+    for (const c of analysis.concepts) {
+      const li = document.createElement("li");
+      li.textContent = c;
+      concepts.appendChild(li);
+    }
+    addSection("Elementos relevantes", concepts);
+
+    const context = document.createElement("div");
+    context.className = "chat-analysis__context";
+    context.textContent = analysis.context;
+    addSection("Contexto general", context);
+
+    const foot = document.createElement("div");
+    foot.className = "chat-analysis__disclaimer";
+    foot.textContent = disclaimer;
+    card.appendChild(foot);
+
+    return card;
   };
 
   const handleSend = async () => {
@@ -276,6 +433,9 @@ const initChatbot = () => {
   close?.addEventListener("click", toggleChat);
   send?.addEventListener("click", handleSend);
   input?.addEventListener("keypress", (e) => e.key === "Enter" && handleSend());
+
+  normalizeChatMarkup();
+  ensureIntroBlocks();
 };
 
 document.addEventListener("DOMContentLoaded", () => {
