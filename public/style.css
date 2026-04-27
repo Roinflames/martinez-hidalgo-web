@@ -5,6 +5,7 @@
   --text: #0a0a0a;
   --text-muted: #666666;
   --accent: #0284c7; /* Sky Blue, precise and forward */
+  --accent-strong: #0369a1;
   --line: #0a0a0a;
   --line-subtle: rgba(10, 10, 10, 0.1);
   
@@ -272,16 +273,30 @@ img:hover { filter: grayscale(0) contrast(1); }
 .team-grid {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
+  gap: 1px;
+  background: var(--line-subtle);
+  border: 1px solid var(--line-subtle);
 }
 
 .team-card {
   grid-column: span 3;
-  border: 1px solid var(--line-subtle);
+  background: var(--bg);
   padding: 24px;
+  transition: background var(--transition);
+}
+
+.team-card:hover {
+  background: var(--bg-subtle);
+}
+
+.team-card h4 {
+  font-size: var(--fs-sm);
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
 }
 
 .team-media {
-  aspect-ratio: 1;
+  aspect-ratio: 4 / 5;
   background: var(--bg-subtle);
   margin-bottom: 24px;
   overflow: hidden;
@@ -291,6 +306,63 @@ img:hover { filter: grayscale(0) contrast(1); }
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center top;
+}
+
+.team-header {
+  margin-bottom: 48px;
+}
+
+.team-title {
+  font-size: var(--fs-lg);
+  text-transform: uppercase;
+  font-weight: 800;
+  margin-top: 16px;
+}
+
+.team-role {
+  color: var(--accent-strong);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.associates-wrap {
+  margin-top: 56px;
+}
+
+.associates-label {
+  opacity: 0.7;
+}
+
+.associates-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1px;
+  background: var(--line-subtle);
+  border: 1px solid var(--line-subtle);
+  margin-top: 20px;
+}
+
+.associate-card {
+  background: var(--bg);
+  padding: 24px;
+  display: block;
+  transition: background var(--transition);
+}
+
+.associate-card:hover {
+  background: var(--bg-subtle);
+}
+
+.associate-card h5 {
+  font-size: 12px;
+  margin-bottom: 6px;
+}
+
+.associate-card p {
+  font-size: 11px;
+  color: var(--text-muted);
 }
 
 /* Footer */
@@ -654,6 +726,7 @@ img:hover { filter: grayscale(0) contrast(1); }
   .hero-sub, .hero-actions { grid-column: span 12; }
   .srv-card { grid-column: span 6; }
   .team-card { grid-column: span 6; }
+  .team-media { aspect-ratio: 1; }
 }
 
 @media (max-width: 768px) {
@@ -661,6 +734,7 @@ img:hover { filter: grayscale(0) contrast(1); }
   .srv-card { grid-column: span 12; }
   .team-card { grid-column: span 12; }
   .why-text, .stats-grid { grid-column: span 12; }
+  .associates-grid { grid-template-columns: 1fr; }
 
   .chat-panel {
     width: min(92vw, 420px);
