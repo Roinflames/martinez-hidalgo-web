@@ -4,7 +4,7 @@
   --bg-subtle: #f8f8f8;
   --text: #0a0a0a;
   --text-muted: #666666;
-  --accent: #b0122d; /* Lacquer Red, surgical and precise */
+  --accent: #0284c7; /* Sky Blue, precise and forward */
   --line: #0a0a0a;
   --line-subtle: rgba(10, 10, 10, 0.1);
   
@@ -204,7 +204,7 @@ img:hover { filter: grayscale(0) contrast(1); }
 }
 
 .srv-card {
-  grid-column: span 4;
+  grid-column: span 3;
   padding: 48px var(--gutter);
   border-right: 1px solid var(--line-subtle);
   border-bottom: 1px solid var(--line-subtle);
@@ -603,6 +603,49 @@ img:hover { filter: grayscale(0) contrast(1); }
   font-size: 12px;
   color: rgba(10,10,10,0.6);
   padding-top: 4px;
+}
+
+/* Concept Strip */
+.concept-strip {
+  border-top: 1px solid var(--line-subtle);
+  border-bottom: 1px solid var(--line-subtle);
+  padding: 48px 0;
+}
+
+.concept-inner {
+  display: flex;
+  align-items: center;
+  gap: 48px;
+}
+
+.concept-item {
+  display: flex;
+  align-items: baseline;
+  gap: 20px;
+  flex: 1;
+}
+
+.concept-label {
+  font-size: var(--fs-xs);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+}
+
+.concept-text {
+  font-size: clamp(20px, 2.5vw, 32px);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.concept-divider {
+  width: 1px;
+  height: 40px;
+  background: var(--line-subtle);
+  flex-shrink: 0;
 }
 
 /* Responsive */
