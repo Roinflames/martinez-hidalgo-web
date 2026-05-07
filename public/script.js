@@ -15,10 +15,21 @@ const scrollToId = (id) => {
 
 const initNavbar = () => {
   const navLinks = document.getElementById("nav-links");
+  const hamburger = document.getElementById("nav-hamburger");
+
+  hamburger?.addEventListener("click", () => {
+    const isOpen = navLinks?.classList.toggle("open");
+    hamburger.classList.toggle("open", isOpen);
+    hamburger.setAttribute("aria-expanded", String(isOpen));
+  });
+
   navLinks?.addEventListener("click", (e) => {
     const target = e.target.closest("a[href^='#']");
     if (!target) return;
     e.preventDefault();
+    navLinks.classList.remove("open");
+    hamburger?.classList.remove("open");
+    hamburger?.setAttribute("aria-expanded", "false");
     scrollToId(target.getAttribute("href"));
   });
 };
@@ -438,9 +449,47 @@ const initChatbot = () => {
   ensureIntroBlocks();
 };
 
+const initContactForm = () => {
+  const form = document.getElementById("contact-form");
+  const msg = document.getElementById("form-msg");
+  if (!form) return;
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const btn = form.querySelector("button[type=submit]");
+    const original = btn.textContent;
+    btn.textContent = "Enviando…";
+    btn.disabled = true;
+    msg.textContent = "";
+
+    try {
+      const res = await fetch("https://formspree.io/f/YOUR_FORM_ID", {
+        method: "POST",
+        body: new FormData(form),
+        headers: { Accept: "application/json" },
+      });
+
+      if (res.ok) {
+        msg.style.color = "var(--accent)";
+        msg.textContent = "Consulta enviada. Le contactaremos a la brevedad.";
+        form.reset();
+      } else {
+        throw new Error();
+      }
+    } catch {
+      msg.style.color = "#e53e3e";
+      msg.textContent = "Error al enviar. Por favor intente de nuevo.";
+    } finally {
+      btn.textContent = original;
+      btn.disabled = false;
+    }
+  });
+};
+
 document.addEventListener("DOMContentLoaded", () => {
   initNavbar();
   initReveal();
   initStats();
   initChatbot();
+  initContactForm();
 });

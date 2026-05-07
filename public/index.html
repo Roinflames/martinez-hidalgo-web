@@ -25,6 +25,9 @@
                 <li><a href="#equipo">Equipo</a></li>
                 <li><a href="#contacto" style="color: var(--accent); font-weight: 700;">Contacto</a></li>
             </ul>
+            <button class="nav-hamburger" id="nav-hamburger" aria-label="Abrir menú" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
         </div>
     </nav>
 
@@ -117,8 +120,8 @@
                         <span class="text-uppercase" style="opacity: 0.6; margin-top: 12px; display: block;">Casos</span>
                     </div>
                     <div class="stat-block">
-                        <span class="stat-num" data-target="98" data-suffix="%">0</span>
-                        <span class="text-uppercase" style="opacity: 0.6; margin-top: 12px; display: block;">Éxito</span>
+                        <span class="stat-num" data-target="4" data-suffix="">0</span>
+                        <span class="text-uppercase" style="opacity: 0.6; margin-top: 12px; display: block;">Áreas</span>
                     </div>
                     <div class="stat-block">
                         <span class="stat-num" data-target="15" data-suffix="">0</span>
@@ -197,9 +200,10 @@
                 </div>
                 <div style="grid-column: 7 / span 6;" class="fade-in">
                     <form id="contact-form" style="display: grid; gap: 24px;">
-                        <input type="text" placeholder="NOMBRE COMPLETO" required style="padding: 20px; border: 1px solid var(--line); font-family: inherit;">
-                        <input type="email" placeholder="CORREO ELECTRÓNICO" required style="padding: 20px; border: 1px solid var(--line); font-family: inherit;">
-                        <textarea placeholder="DESCRIPCIÓN BREVE DEL CASO" rows="5" required style="padding: 20px; border: 1px solid var(--line); font-family: inherit; resize: none;"></textarea>
+                        <input type="text" name="nombre" placeholder="NOMBRE COMPLETO" required style="padding: 20px; border: 1px solid var(--line); font-family: inherit;">
+                        <input type="email" name="email" placeholder="CORREO ELECTRÓNICO" required style="padding: 20px; border: 1px solid var(--line); font-family: inherit;">
+                        <textarea name="caso" placeholder="DESCRIPCIÓN BREVE DEL CASO" rows="5" required style="padding: 20px; border: 1px solid var(--line); font-family: inherit; resize: none;"></textarea>
+                        <input type="hidden" name="_subject" value="Nueva consulta ABHV">
                         <button type="submit" class="btn-primary" style="width: 100%;">Enviar Consulta</button>
                     </form>
                     <div id="form-msg" style="margin-top: 16px; font-weight: 600; font-size: var(--fs-sm);"></div>
