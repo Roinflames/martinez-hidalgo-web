@@ -392,6 +392,14 @@ img:hover { filter: grayscale(0) contrast(1); }
   transform: translateY(0);
 }
 
+/* Hero always visible — no depende de JS */
+.hero .reveal,
+.hero .reveal-up,
+.hero .fade-in {
+  opacity: 1;
+  transform: none;
+}
+
 /* Chatbot */
 .chatbot-widget {
   position: fixed;
