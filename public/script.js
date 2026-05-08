@@ -14,8 +14,17 @@ const scrollToId = (id) => {
 };
 
 const initNavbar = () => {
+  const navbar = document.getElementById("navbar");
   const navLinks = document.getElementById("nav-links");
   const hamburger = document.getElementById("nav-hamburger");
+
+  const updateNavbar = () => {
+    const atTop = window.scrollY < 60;
+    navbar?.classList.toggle("navbar--transparent", atTop);
+    navbar?.classList.toggle("navbar--scrolled", !atTop);
+  };
+  updateNavbar();
+  window.addEventListener("scroll", updateNavbar, { passive: true });
 
   hamburger?.addEventListener("click", () => {
     const isOpen = navLinks?.classList.toggle("open");

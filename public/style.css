@@ -85,9 +85,10 @@ img:hover { filter: grayscale(0) contrast(1); }
   left: 0;
   width: 100%;
   z-index: 1000;
-  background: var(--bg);
-  border-bottom: 1px solid var(--line);
+  background: transparent;
+  border-bottom: 1px solid transparent;
   height: 72px;
+  transition: background 0.3s ease, border-color 0.3s ease;
   display: flex;
   align-items: center;
 }
@@ -123,6 +124,20 @@ img:hover { filter: grayscale(0) contrast(1); }
 
 .nav-links a:hover { color: var(--accent); }
 
+.navbar--scrolled {
+  background: var(--bg);
+  border-bottom-color: var(--line);
+}
+
+.navbar--transparent .nav-logo,
+.navbar--transparent .nav-links a {
+  color: #ffffff;
+}
+
+.navbar--transparent .nav-links a:hover { color: #7dd3fc; }
+
+.navbar--transparent .nav-hamburger span { background: #ffffff; }
+
 /* Hero */
 .hero {
   min-height: 100vh;
@@ -130,7 +145,23 @@ img:hover { filter: grayscale(0) contrast(1); }
   flex-direction: column;
   justify-content: center;
   padding-top: 72px;
+  padding-bottom: 80px;
   position: relative;
+  background: url("assets/hero.jpg") center center / cover no-repeat;
+}
+
+.hero > .container {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(10,10,10,0.72) 0%, rgba(22,59,102,0.60) 100%);
+  pointer-events: none;
 }
 
 .hero-content {
@@ -142,6 +173,8 @@ img:hover { filter: grayscale(0) contrast(1); }
 .hero-eyebrow {
   grid-column: span 12;
   margin-bottom: 24px;
+  color: rgba(255,255,255,0.75);
+  position: relative;
 }
 
 .hero-title {
@@ -151,14 +184,21 @@ img:hover { filter: grayscale(0) contrast(1); }
   font-weight: 800;
   letter-spacing: -0.04em;
   text-transform: uppercase;
+  color: #ffffff;
+  position: relative;
+}
+
+.hero-title .text-accent {
+  color: #7dd3fc;
 }
 
 .hero-sub {
   grid-column: 7 / span 5;
   margin-top: 40px;
   font-size: var(--fs-md);
-  color: var(--text-muted);
+  color: rgba(255,255,255,0.80);
   font-weight: 400;
+  position: relative;
 }
 
 .hero-actions {
@@ -166,6 +206,17 @@ img:hover { filter: grayscale(0) contrast(1); }
   margin-top: 48px;
   display: flex;
   gap: 24px;
+  position: relative;
+}
+
+.hero .btn-ghost {
+  border-color: rgba(255,255,255,0.55);
+  color: #ffffff;
+}
+
+.hero .btn-ghost:hover {
+  background: rgba(255,255,255,0.12);
+  border-color: #ffffff;
 }
 
 /* Buttons */
