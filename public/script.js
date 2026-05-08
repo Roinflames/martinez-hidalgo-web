@@ -486,6 +486,21 @@ const initContactForm = () => {
   });
 };
 
+const initLoader = () => {
+  const loader = document.getElementById("page-loader");
+  if (!loader) return;
+  const start = Date.now();
+  const MIN_MS = 1600;
+  const hide = () => {
+    const wait = Math.max(0, MIN_MS - (Date.now() - start));
+    setTimeout(() => loader.classList.add("hidden"), wait);
+  };
+  if (document.readyState === "complete") { hide(); return; }
+  window.addEventListener("load", hide, { once: true });
+};
+
+initLoader();
+
 document.addEventListener("DOMContentLoaded", () => {
   initNavbar();
   initReveal();
